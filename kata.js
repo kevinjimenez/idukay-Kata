@@ -32,6 +32,7 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
         let respuetaOpcionDos = [];
         let acumuladorPocionesMescla = 0;
         let acumuladorPocionesIndividual = 0;
+        let ataque = {};
         for (const mesclasArreglo of arregloMesclas) {
             acumuladorPocionesMescla = 0;
             acumuladorPocionesIndividual = 0;
@@ -40,12 +41,63 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
                     (pocion) => {
                         let keyPocion = Object.keys(pocion);
                         let numeroPociones = pocion[keyPocion];
-                        let valorDanio = danioPociones[numeroPociones];
+                        let valorDanio = danio.danioPociones[numeroPociones];
                         acumuladorPocionesMescla += numeroPociones;
                         acumuladorPocionesIndividual += valorDanio;
-                    })
+                    });
+            let danioMescla = danio.danioPociones[acumuladorPocionesMescla];
+
+            if (danioMescla > acumuladorPocionesIndividual) {
+                ataque = {
+                    mescla: {
+                        arreglo: mesclasArreglo,
+                        danio: danioMescla,
+                    }
+                }
+                respuetaOpcionUno.push(ataque);
+            } else {
+                ataque = {
+                    individual: {
+                        arreglo: mesclasArreglo,
+                        danio: acumuladorPocionesIndividual,
+                    }
+                }
+                respuetaOpcionUno.push(ataque);
+            }
+
+
+            if (danioMescla < acumuladorPocionesIndividual) {
+                ataque = {
+                    mescla: {
+                        arreglo: mesclasArreglo,
+                        danio: danioMescla,
+                    }
+                }
+                respuetaOpcionDos.push(ataque);
+            } else if (danioMescla > acumuladorPocionesIndividual) {
+                ataque = {
+                    mescla: {
+                        arreglo: mesclasArreglo,
+                        danio: danioMescla,
+                    }
+                }
+                respuetaOpcionDos.push(ataque);
+            } else {
+                ataque = {
+                    individual: {
+                        arreglo: mesclasArreglo,
+                        danio: acumuladorPocionesIndividual,
+                    }
+                }
+                respuetaOpcionDos.push(ataque);
+            }
         }
     }
+}
+
+function construccionRespuesta(opcionAtaque) {
+let totalDanioPociones = 0;
+let respuestaMesclas = [];
 }
 
 var compraPocionesBrujo = [
