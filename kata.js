@@ -4,7 +4,7 @@ var arregloPociones;
 var arregloMesclaPociones;
 var arregloMesclas = [];
 function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
-    arregloClonPociones = []; 
+    arregloClonPociones = [];
     arregloPociones = [];
     arregloMesclaPociones = []
     if (arregloPocionesBrujo.length > 0) {
@@ -14,19 +14,19 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
                     let clonPocionBrujo = Object.assign({}, pocion);
                     let keyPocionBrujo = Object.keys(pocion);
                     let numeroPocionesBrujo = pocion[keyPocionBrujo];
-                    let numeroClonPocionesBrujo = clonPocionBrujo[keyPocionBrujo];
-                    if(numeroPocionesBrujo > 0){
-                        numeroPocionesBrujo--;
+                    let numeroClonPocionesBrujo = clonPocionBrujo[keyPocionBrujo];                    
+                    if (numeroClonPocionesBrujo > 1) {
+                        pocion[keyPocionBrujo] = numeroClonPocionesBrujo - 1;
                         numeroClonPocionesBrujo = 1;
                         arregloClonPociones.push(clonPocionBrujo);
                         arregloPociones.push(pocion);
-                    }else{
+                    } else {
                         arregloMesclaPociones.push(pocion);
                     }
                 });
-                arregloMesclaPociones = [...arregloMesclaPociones, ...arregloClonPociones];
-                arregloMesclas.push(arregloMesclaPociones);
-                return calculoDanioPocionesBrujo(arregloPociones);
+        arregloMesclaPociones = [...arregloMesclaPociones, ...arregloClonPociones];
+        arregloMesclas.push(arregloMesclaPociones);
+        return calculoDanioPocionesBrujo(arregloPociones);
     } else {
         console.log(arregloMesclas);
     }
