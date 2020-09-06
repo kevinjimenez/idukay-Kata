@@ -14,7 +14,7 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
                     let clonPocionBrujo = Object.assign({}, pocion);
                     let keyPocionBrujo = Object.keys(pocion);
                     let numeroPocionesBrujo = pocion[keyPocionBrujo];
-                    let numeroClonPocionesBrujo = clonPocionBrujo[keyPocionBrujo];                    
+                    let numeroClonPocionesBrujo = clonPocionBrujo[keyPocionBrujo];
                     if (numeroClonPocionesBrujo > 1) {
                         pocion[keyPocionBrujo] = numeroClonPocionesBrujo - 1;
                         numeroClonPocionesBrujo = 1;
@@ -28,7 +28,23 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
         arregloMesclas.push(arregloMesclaPociones);
         return calculoDanioPocionesBrujo(arregloPociones);
     } else {
-        console.log(arregloMesclas);
+        let respuetaOpcionUno = [];
+        let respuetaOpcionDos = [];
+        let acumuladorPocionesMescla = 0;
+        let acumuladorPocionesIndividual = 0;
+        for (const mesclasArreglo of arregloMesclas) {
+            acumuladorPocionesMescla = 0;
+            acumuladorPocionesIndividual = 0;
+            mesclasArreglo
+                .forEach(
+                    (pocion) => {
+                        let keyPocion = Object.keys(pocion);
+                        let numeroPociones = pocion[keyPocion];
+                        let valorDanio = danioPociones[numeroPociones];
+                        acumuladorPocionesMescla += numeroPociones;
+                        acumuladorPocionesIndividual += valorDanio;
+                    })
+        }
     }
 }
 
