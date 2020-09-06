@@ -1,9 +1,9 @@
-const danioPociones = {
-    1: 3,
-    2: 5,
-    3: 10,
-    4: 20,
-    5: 25,
+const pociones = {
+    roja: 'Pocion roja',
+    azul: 'Pocion azul',
+    verde: 'Pocion verde',
+    amarillo: 'Pocion amarillo',
+    gris: 'Pocion gris',
 }
 
-exports.danioPociones = danioPociones;
+exports.pociones = pociones;
