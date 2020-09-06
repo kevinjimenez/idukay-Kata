@@ -11,13 +11,11 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
         arregloPocionesBrujo
             .forEach(
                 pocion => {
-                    let clonPocionBrujo = Object.assign({}, pocion);
-                    let keyPocionBrujo = Object.keys(pocion);
-                    let numeroPocionesBrujo = pocion[keyPocionBrujo];
-                    let numeroClonPocionesBrujo = clonPocionBrujo[keyPocionBrujo];
-                    if (numeroClonPocionesBrujo > 1) {
-                        pocion[keyPocionBrujo] = numeroClonPocionesBrujo - 1;
-                        numeroClonPocionesBrujo = 1;
+                    var clonPocionBrujo = Object.assign({}, pocion);
+                    var keyPocionBrujo = Object.keys(pocion)[0];
+                    if (pocion[keyPocionBrujo] > 1) {
+                        pocion[keyPocionBrujo] = pocion[keyPocionBrujo] - 1;
+                        clonPocionBrujo[keyPocionBrujo] = 1;
                         arregloClonPociones.push(clonPocionBrujo);
                         arregloPociones.push(pocion);
                     } else {
@@ -28,11 +26,10 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
         arregloMesclas.push(arregloMesclaPociones);
         return calculoDanioPocionesBrujo(arregloPociones);
     } else {
-        let respuetaOpcionUno = [];
-        let respuetaOpcionDos = [];
-        let acumuladorPocionesMescla = 0;
-        let acumuladorPocionesIndividual = 0;
-        let ataque = {};
+        var respuetaOpcionUno = [];
+        var respuetaOpcionDos = [];
+        var acumuladorPocionesMescla = 0;
+        var acumuladorPocionesIndividual = 0;
         for (const mesclasArreglo of arregloMesclas) {
             acumuladorPocionesMescla = 0;
             acumuladorPocionesIndividual = 0;
@@ -48,56 +45,76 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
             let danioMescla = danio.danioPociones[acumuladorPocionesMescla];
 
             if (danioMescla > acumuladorPocionesIndividual) {
-                ataque = {
-                    mescla: {
-                        arreglo: mesclasArreglo,
-                        danio: danioMescla,
-                    }
-                }
-                respuetaOpcionUno.push(ataque);
+                respuetaOpcionUno
+                    .push({ mescla: { danio: danioMescla, arreglo: mesclasArreglo } });
             } else {
-                ataque = {
-                    individual: {
-                        arreglo: mesclasArreglo,
-                        danio: acumuladorPocionesIndividual,
-                    }
-                }
-                respuetaOpcionUno.push(ataque);
+                respuetaOpcionUno
+                    .push({ individual: { danio: acumuladorPocionesIndividual, arreglo: mesclasArreglo } });
             }
 
 
-            if (danioMescla < acumuladorPocionesIndividual) {
-                ataque = {
-                    mescla: {
-                        arreglo: mesclasArreglo,
-                        danio: danioMescla,
-                    }
-                }
-                respuetaOpcionDos.push(ataque);
-            } else if (danioMescla > acumuladorPocionesIndividual) {
-                ataque = {
-                    mescla: {
-                        arreglo: mesclasArreglo,
-                        danio: danioMescla,
-                    }
-                }
-                respuetaOpcionDos.push(ataque);
-            } else {
-                ataque = {
-                    individual: {
-                        arreglo: mesclasArreglo,
-                        danio: acumuladorPocionesIndividual,
-                    }
-                }
-                respuetaOpcionDos.push(ataque);
+            if (danioMescla < acumuladorPocionesIndividual) {                
+                respuetaOpcionDos
+                .push({ mescla: { danio: danioMescla, arreglo: mesclasArreglo } });
+            } else if (danioMescla > acumuladorPocionesIndividual) {                
+                respuetaOpcionDos
+                .push({ mescla: { danio: danioMescla, arreglo: mesclasArreglo } });
+            }else {            
+                respuetaOpcionDos
+                .push({ individual: { danio: acumuladorPocionesIndividual, arreglo: mesclasArreglo } });
             }
         }
+    }    
+
+    let ataqueOpcionUno = construccionRespuesta(respuetaOpcionUno);
+    console.log('Respuesta 1:')
+    ataqueOpcionUno
+        .respuestaMesclas
+        .forEach((item, indice) => {
+            console.log(`Ataque ${indice + 1}: ${item}`)
+        })
+    console.log(`Total: el brujo ha causado un ${ataqueOpcionUno.totalDanioPociones}% de daño.`);
+
+    var ataqueOpcionDos = construccionRespuesta(respuetaOpcionDos)
+    console.log('Respuesta 2:')
+    ataqueOpcionDos
+        .respuestaMesclas
+        .forEach((item, indice) => {
+            console.log(`Ataque ${indice + 1}: ${item}`)
+        })
+    console.log(`Total: el brujo ha causado un ${ataqueOpcionDos.totalDanioPociones}% de daño.`);
+    if (ataqueOpcionUno.totalDanioPociones > ataqueOpcionDos.totalDanioPociones) {
+        console.log(`Por lo tanto la respuesta correcta en estas combinaciones es la 1er.`)
+    } else {
+        console.log(`Por lo tanto la respuesta correcta en estas combinaciones es la 2da.`)
     }
 }
 
 function construccionRespuesta(opcionAtaque) {
-let totalDanioPociones = 0;
-let respuestaMesclas = [];
+    let totalDanioPociones = 0;
+    let respuestaMesclas = [];
+    for (const item of opcionAtaque) {
+        var keyJsonOpciones = Object.keys(item)[0];
+        var arregloPociones = item[keyJsonOpciones].arreglo
+        var valorJsonOpciones = item[keyJsonOpciones].danio
+        switch (keyJsonOpciones) {
+            case 'mescla':
+                var mescla = `usar ${arregloPociones.length} pociones distintas causan un ${valorJsonOpciones}% de daño.`
+                respuestaMesclas.push(mescla)
+                totalDanioPociones += valorJsonOpciones;
+                continue;
+            case 'individual':
+                for (const itemPociones of arregloPociones) {
+                    var key = Object.keys(itemPociones);
+                    var danioAtque = danio.danioPociones[itemPociones[key]];
+                    var individual = `usar 1 poción causa un ${danio.danioPociones[itemPociones[key]]}% de daño.`
+                    respuestaMesclas.push(individual)
+                    totalDanioPociones += danioAtque;
+                }
+                break;
+        }
+    }
+    return { respuestaMesclas, totalDanioPociones };
 }
 
 var compraPocionesBrujo = [
