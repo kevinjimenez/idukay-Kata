@@ -10,3 +10,4 @@
 ```javascritp
 npm start
 ```
+* Se uso contantes para poder tener un mejor control dichas constantes se realizaron  para el daño como para la pociones. 
