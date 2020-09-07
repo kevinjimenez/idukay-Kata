@@ -1,16 +1,18 @@
-const danio = require('./constantes/danioPociones.constante');
-var arregloClonPociones;
-var arregloPociones;
-var arregloMesclaPociones;
-var arregloMesclas = [];
-function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
+const danio = require('../constantes/danioPociones.constante');
+import {Alert} from 'react-native';
+import * as React from 'react';
+var arregloClonPociones: any;
+var arregloPociones: any;
+var arregloMesclaPociones: any;
+var arregloMesclas: any = [];
+export function calculoDanioPocionesBrujo(arregloPocionesBrujo: any):any {
     arregloClonPociones = [];
     arregloPociones = [];
     arregloMesclaPociones = []
     if (arregloPocionesBrujo.length > 0) {
         arregloPocionesBrujo
             .forEach(
-                pocion => {
+                (pocion: any) => {
                     var clonPocionBrujo = Object.assign({}, pocion);
                     var keyPocionBrujo = Object.keys(pocion)[0];
                     if (pocion[keyPocionBrujo] > 1) {
@@ -35,8 +37,8 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
             acumuladorPocionesIndividual = 0;
             mesclasArreglo
                 .forEach(
-                    (pocion) => {
-                        let keyPocion = Object.keys(pocion);
+                    (pocion: any) => {
+                        let keyPocion: any = Object.keys(pocion);
                         let numeroPociones = pocion[keyPocion];
                         let valorDanio = danio.danioPociones[numeroPociones];
                         acumuladorPocionesMescla += numeroPociones;
@@ -66,13 +68,18 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
         }
     }    
 
+    var respuestaUno = 'Respuesta 1:'+'\n';
+    var respuestaDos = 'Respuesta 2:'+'\n';
+    var respuestaFinal = '';
     let ataqueOpcionUno = construccionRespuesta(respuetaOpcionUno);
     console.log('Respuesta 1:')
     ataqueOpcionUno
         .respuestaMesclas
         .forEach((item, indice) => {
             console.log(`Ataque ${indice + 1}: ${item}`)
+            respuestaUno += `Ataque ${indice + 1}: ${item}`+'\n';
         })
+        respuestaUno += `Total: el brujo ha causado un ${ataqueOpcionUno.totalDanioPociones}% de daño.`
     console.log(`Total: el brujo ha causado un ${ataqueOpcionUno.totalDanioPociones}% de daño.`);
 
     var ataqueOpcionDos = construccionRespuesta(respuetaOpcionDos)
@@ -80,17 +87,28 @@ function calculoDanioPocionesBrujo(arregloPocionesBrujo) {
     ataqueOpcionDos
         .respuestaMesclas
         .forEach((item, indice) => {
+            respuestaDos += `Ataque ${indice + 1}: ${item}`+'\n';
             console.log(`Ataque ${indice + 1}: ${item}`)
         })
+        respuestaDos += `Total: el brujo ha causado un ${ataqueOpcionDos.totalDanioPociones}% de daño.`;
     console.log(`Total: el brujo ha causado un ${ataqueOpcionDos.totalDanioPociones}% de daño.`);
     if (ataqueOpcionUno.totalDanioPociones > ataqueOpcionDos.totalDanioPociones) {
+        respuestaFinal = `Por lo tanto la respuesta correcta en estas combinaciones es la 1er.`
         console.log(`Por lo tanto la respuesta correcta en estas combinaciones es la 1er.`)
     } else {
+        respuestaFinal = `Por lo tanto la respuesta correcta en estas combinaciones es la 2da.`
         console.log(`Por lo tanto la respuesta correcta en estas combinaciones es la 2da.`)
     }
+    console.log(respuestaUno);
+    console.log(respuestaDos);
+    
+    Alert.alert(
+        respuestaUno + '\n' + respuestaDos,        
+        respuestaFinal,                
+    )
 }
 
-function construccionRespuesta(opcionAtaque) {
+function construccionRespuesta(opcionAtaque: any) {
     let totalDanioPociones = 0;
     let respuestaMesclas = [];
     for (const item of opcionAtaque) {
@@ -105,7 +123,7 @@ function construccionRespuesta(opcionAtaque) {
                 continue;
             case 'individual':
                 for (const itemPociones of arregloPociones) {
-                    var key = Object.keys(itemPociones);
+                    var key: any = Object.keys(itemPociones);
                     var danioAtque = danio.danioPociones[itemPociones[key]];
                     var individual = `usar 1 poción causa un ${danio.danioPociones[itemPociones[key]]}% de daño.`
                     respuestaMesclas.push(individual)
@@ -117,12 +135,3 @@ function construccionRespuesta(opcionAtaque) {
     return { respuestaMesclas, totalDanioPociones };
 }
 
-var compraPocionesBrujo = [
-    { azul: 2 },
-    { azul: 2 },
-    { azul: 2 },
-    { azul: 1 },
-    { azul: 1 },
-]
-
-calculoDanioPocionesBrujo(compraPocionesBrujo)
